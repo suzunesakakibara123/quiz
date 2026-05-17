@@ -242,46 +242,35 @@ public class QuizController {
     /** Quizデータをランダムで1件取得し、画面に表示する */
     @GetMapping("/play10")
     public String showQuiz10(Model model) {
-    	//Serviceからランダムに10問取得し、複数件扱える型のquizListに入れる。
+
+        // Serviceからランダムに10問取得し、複数件扱える型のquizListに入れる
         Iterable<Quiz> quizList = service.findRandom10Quiz();
-        //取得した10問のクイズをHTMLに渡す。
+
+        // 取得した10問のクイズをHTMLに渡す
         model.addAttribute("quizList", quizList);
-        //play10.htmlを表示させる。
+
+        // 10問回答用のFormをHTMLに渡す
+        model.addAttribute("quiz10Form", new Quiz10Form());
+
+        // play10.htmlを表示させる
         return "play10";
     }
 
-    /** クイズの正解/不正解を判定する */
-    @PostMapping("/check")
-    public String checkQuiz(
-            QuizForm quizForm,
-            @RequestParam Boolean answer,
-            Model model) {
-
-        if (service.checkQuiz(quizForm.getId(), answer)) {
-
-            model.addAttribute("msg", "正解です！");
-
-        } else {
-
-            model.addAttribute("msg", "残念、不正解です・・・");
-        }
-
-        return "answer";
-    }
-    
     @PostMapping("/check10")
     public String checkQuiz10(
             Quiz10Form quiz10Form,
             Model model) {
-        //正解数を数得る変数correvtCountの初期値は0。
+
         int correctCount = 0;
-        
+        int answerCount = 0;
+
         System.out.println("=== 10問回答チェック開始 ===");
-        //全ての回答を取得し、正解・不正解を判定する。
+
         for (QuizAnswerForm answer : quiz10Form.getAnswers()) {
-        	
+
             System.out.println("id = " + answer.getId());
             System.out.println("myAnswer = " + answer.getMyAnswer());
+
             // idがnullなら採点しない
             if (answer.getId() == null) {
                 continue;
@@ -292,21 +281,24 @@ public class QuizController {
                 continue;
             }
 
-            if (service.checkQuiz(answer.getId(), answer.getMyAnswer())) {
+            answerCount++;
+
+            boolean result = service.checkQuiz(answer.getId(), answer.getMyAnswer());
+
+            answer.setCorrect(result);
+
+            if (result) {
                 correctCount++;
             }
         }
 
         System.out.println("=== 10問回答チェック終了 ===");
 
-        //結果画面にデータを渡す。
-        //正解数の結果
         model.addAttribute("correctCount", correctCount);
-        //全問題数
-        model.addAttribute("totalCount", quiz10Form.getAnswers().size());
-        //各問題の結果
+        model.addAttribute("totalCount", answerCount);
         model.addAttribute("answers", quiz10Form.getAnswers());
 
         return "result10";
+
     }
 }

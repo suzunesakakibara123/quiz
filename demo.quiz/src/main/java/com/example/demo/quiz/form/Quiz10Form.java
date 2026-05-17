@@ -8,5 +8,4 @@ import lombok.Data;
 public class Quiz10Form {
 
     private List<QuizAnswerForm> answers;
-
 }

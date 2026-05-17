@@ -13,11 +13,6 @@
                 クイズ内容
             </p>
 
-            <p>
-                確認用ID：
-                <span th:text="${quiz.id}"></span>
-            </p>
-
             <input type="hidden"
                    th:attr="name='answers[' + ${stat.index} + '].id', value=${quiz.id}">
 

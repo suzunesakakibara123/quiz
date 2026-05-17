@@ -8,35 +8,32 @@
 
 <body>
 
-    <h1>10問クイズ結果</h1>
+<h1>10問クイズ結果</h1>
 
-    <p>
-        <span th:text="${totalCount}"></span>問中
-        <span th:text="${correctCount}"></span>問正解です！
-    </p>
+<p>
+    <span th:text="${totalCount}"></span>問中
+    <span th:text="${correctCount}"></span>問正解です！
+</p>
 
-    <hr>
+<hr>
 
-    <div th:each="answer, stat : ${answers}">
+<div th:each="answer, stat : ${answers}">
+
+    <th:block th:if="${answer.id != null}">
 
         <p>
             第<span th:text="${stat.count}"></span>問：
-
-            <span th:if="${answer.correct}">
-                正解
-            </span>
-
-            <span th:unless="${answer.correct}">
-                不正解
-            </span>
+            <span th:if="${answer.correct}">正解</span>
+            <span th:unless="${answer.correct}">不正解</span>
         </p>
 
-    </div>
+    </th:block>
 
-    <a th:href="@{/quiz/play10}">
-        もう一度10問クイズをする
-    </a>
+</div>
+
+<a th:href="@{/quiz/play10}">
+    もう一度10問クイズをする
+</a>
 
 </body>
-
 </html>
