@@ -70,5 +70,10 @@ public class QuizServiceImpl implements QuizService {
 		// TODO 自動生成されたメソッド・スタブ
   	  repository.deleteById(id);
 	}
-
+	@Override
+	public Iterable<Quiz> findRandom10Quiz() {
+		// TODO 自動生成されたメソッド・スタブ
+		return repository.findRandom10Quiz();
+	};
 }
+

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.quiz.entity.Quiz;
+import com.example.demo.quiz.form.Quiz10Form;
+import com.example.demo.quiz.form.QuizAnswerForm;
 import com.example.demo.quiz.form.QuizForm;
 import com.example.demo.quiz.service.QuizService;
 
@@ -236,6 +238,17 @@ public class QuizController {
 
         return "play";
     }
+    
+    /** Quizデータをランダムで1件取得し、画面に表示する */
+    @GetMapping("/play10")
+    public String showQuiz10(Model model) {
+    	//Serviceからランダムに10問取得し、複数件扱える型のquizListに入れる。
+        Iterable<Quiz> quizList = service.findRandom10Quiz();
+        //取得した10問のクイズをHTMLに渡す。
+        model.addAttribute("quizList", quizList);
+        //play10.htmlを表示させる。
+        return "play10";
+    }
 
     /** クイズの正解/不正解を判定する */
     @PostMapping("/check")
@@ -254,5 +267,46 @@ public class QuizController {
         }
 
         return "answer";
+    }
+    
+    @PostMapping("/check10")
+    public String checkQuiz10(
+            Quiz10Form quiz10Form,
+            Model model) {
+        //正解数を数得る変数correvtCountの初期値は0。
+        int correctCount = 0;
+        
+        System.out.println("=== 10問回答チェック開始 ===");
+        //全ての回答を取得し、正解・不正解を判定する。
+        for (QuizAnswerForm answer : quiz10Form.getAnswers()) {
+        	
+            System.out.println("id = " + answer.getId());
+            System.out.println("myAnswer = " + answer.getMyAnswer());
+            // idがnullなら採点しない
+            if (answer.getId() == null) {
+                continue;
+            }
+
+            // 回答が未選択なら採点しない
+            if (answer.getMyAnswer() == null) {
+                continue;
+            }
+
+            if (service.checkQuiz(answer.getId(), answer.getMyAnswer())) {
+                correctCount++;
+            }
+        }
+
+        System.out.println("=== 10問回答チェック終了 ===");
+
+        //結果画面にデータを渡す。
+        //正解数の結果
+        model.addAttribute("correctCount", correctCount);
+        //全問題数
+        model.addAttribute("totalCount", quiz10Form.getAnswers().size());
+        //各問題の結果
+        model.addAttribute("answers", quiz10Form.getAnswers());
+
+        return "result10";
     }
 }

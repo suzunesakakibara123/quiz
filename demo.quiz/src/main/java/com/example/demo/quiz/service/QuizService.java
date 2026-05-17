@@ -20,5 +20,6 @@ public interface QuizService {
 	void updateQuiz(Quiz quiz);
 	/**クイズを削除する*/
 	void deleteQuizById(Integer id);
+	Iterable<Quiz> findRandom10Quiz();
 	
 }
