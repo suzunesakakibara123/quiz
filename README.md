@@ -1,4 +1,4 @@
-クイズアプリの改修 ～実装前の確認メモ～
+クイズアプリの改修 ～実装前確認メモ～
 
 ◆追加する機能要件：システムやソフトウェアが「何をするべきか」「ユーザーに何を提供するか」という具体的な機能や処理内容
 
@@ -31,9 +31,27 @@
 ー4択問題を1問ずつ登録する機能ー<br>
 <img width="254" height="320" alt="image" src="https://github.com/user-attachments/assets/fd5f1718-efab-4fe9-a433-39df9cc8de01" />
 
-ークイズをCSV経由でまとめて作成する機能ー<br>
+ークイズをCSV経由でまとめて作成する機能ー<br>　
 <img width="258" height="320" alt="image" src="https://github.com/user-attachments/assets/b4d5c4fd-eced-42e7-8ab2-f073a160fd0d" />
 
 
+◆各種設定予定URL
 
+・2択問題を10問ランダムに出題する画面：/quiz/play10
+
+・10問の回答結果を表示する画面：/quiz/result10
+
+・4択問題の一覧を表示する画面：/quiz4
+
+・4択問題を新規作成する画面：/quiz4/create
+
+・4択問題を編集する画面：/quiz4/edit/{id}
+
+・4択問題を削除する処理：/quiz4/delete/{id}
+
+・4択問題を1問ランダムに出題する画面：/quiz4/play
+
+・4択問題の正解・不正解を表示する画面：/quiz4/result
+
+・CSVファイルから4択問題をまとめて登録する画面：/quiz4/csv-upload
  
