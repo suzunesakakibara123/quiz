@@ -1,4 +1,5 @@
 【テーブル作成時のSQL文】
+（4択問題）
 CREATE TABLE quiz4 (
     id SERIAL PRIMARY KEY,
     question VARCHAR(255) NOT NULL,
