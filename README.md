@@ -20,7 +20,13 @@
  ◆画面要件：システム開発においてユーザーとシステムが接する「画面」に求められる機能や仕様の定義・用意するべき画面の案
 
 ーメニュー画面ー<br>
-<img width="252" height="320" alt="image" src="https://github.com/user-attachments/assets/32b02145-801a-44a9-86a3-a5e4de98d602" />
+<img width="240" height="320" alt="image" src="https://github.com/user-attachments/assets/72d06599-9b56-4ef1-9386-a02ca8278631" />
+
+ー2択メニューー<br>
+<img width="240" height="320" alt="image" src="https://github.com/user-attachments/assets/6cbb67d1-f59d-4c55-89ab-6aee67f24c6c" />
+
+ー4択メニューー<br>
+<img width="240" height="320" alt="image" src="https://github.com/user-attachments/assets/c0e3d97b-3d15-4d6e-be97-cdd286cde615" />
 
 ー2択問題を10個一括でPlayして、結果を表示する機能ー<br>
 <img width="320" height="188" alt="image" src="https://github.com/user-attachments/assets/9739528f-8be5-43b5-bb26-1d6c733b6f0a" />
