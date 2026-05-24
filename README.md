@@ -1,4 +1,17 @@
-クイズアプリの改修 ～実装前確認メモ～
+【テーブル作成時のSQL文】
+CREATE TABLE quiz4 (
+    id SERIAL PRIMARY KEY,
+    question VARCHAR(255) NOT NULL,
+    choice1 VARCHAR(255) NOT NULL,
+    choice2 VARCHAR(255) NOT NULL,
+    choice3 VARCHAR(255) NOT NULL,
+    choice4 VARCHAR(255) NOT NULL,
+    answer INTEGER NOT NULL,
+    explanation VARCHAR(255)
+);
+
+
+【クイズアプリの改修 ～実装前確認メモ～】
 
 ◆追加する機能要件：システムやソフトウェアが「何をするべきか」「ユーザーに何を提供するか」という具体的な機能や処理内容
 
