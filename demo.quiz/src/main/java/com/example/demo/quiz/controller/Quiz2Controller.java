@@ -1,5 +1,8 @@
 package com.example.demo.quiz.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.quiz.entity.Quiz2;
@@ -44,10 +48,10 @@ public class Quiz2Controller {
 
     /** Quizの一覧を表示します */
     @GetMapping
-    public String showList(Quiz2Form quizForm, Model model) {
+    public String showList(Quiz2Form quiz2Form, Model model) {
 
         // 新規登録設定
-        quizForm.setNewQuiz(true);
+        quiz2Form.setNewQuiz(true);
 
         // クイズの一覧を取得する
         Iterable<Quiz2> list = service.selectAllQuiz2();
@@ -62,7 +66,7 @@ public class Quiz2Controller {
     /** Quizデータを1件挿入 */
     @PostMapping("/insert")
     public String insert(
-            @Validated Quiz2Form quizForm,
+            @Validated Quiz2Form quiz2Form,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
@@ -70,9 +74,9 @@ public class Quiz2Controller {
         // FormからEntityへの詰め替え
         Quiz2 quiz2 = new Quiz2();
 
-        quiz2.setQuestion(quizForm.getQuestion());
-        quiz2.setAnswer(quizForm.getAnswer());
-        quiz2.setAuthor(quizForm.getAuthor());
+        quiz2.setQuestion(quiz2Form.getQuestion());
+        quiz2.setAnswer(quiz2Form.getAnswer());
+        quiz2.setAuthor(quiz2Form.getAuthor());
 
         // 入力チェック
         if (!bindingResult.hasErrors()) {
@@ -88,14 +92,14 @@ public class Quiz2Controller {
         } else {
 
             // エラーがある場合は、一覧表示処理を呼びます
-            return showList(quizForm, model);
+            return showList(quiz2Form, model);
         }
     }
 
     /** Quizデータを1件取得し、フォーム内に表示する */
     @GetMapping("/{id:[0-9]+}")
     public String showUpdate(
-            Quiz2Form quizForm,
+            Quiz2Form quiz2Form,
             @PathVariable Integer id,
             Model model) {
 
@@ -103,30 +107,30 @@ public class Quiz2Controller {
         Optional<Quiz2> quizOpt = service.selectOneById(id);
 
         // Quiz2Formへの詰め直し
-        Optional<Quiz2Form> quizFormOpt =
+        Optional<Quiz2Form> quiz2FormOpt =
                 quizOpt.map(t -> makeQuiz2Form(t));
 
         // Quiz2Formがnullでなければ中身を取り出す
-        if (quizFormOpt.isPresent()) {
-            quizForm = quizFormOpt.get();
+        if (quiz2FormOpt.isPresent()) {
+            quiz2Form = quiz2FormOpt.get();
         }
 
         // 更新用のModelを作成する
-        makeUpdateModel(quizForm, model);
+        makeUpdateModel(quiz2Form, model);
 
         return "quiz2/crud2";
     }
 
     /** 更新用のModelを作成する */
     private void makeUpdateModel(
-            Quiz2Form quizForm,
+            Quiz2Form quiz2Form,
             Model model) {
 
-        model.addAttribute("id", quizForm.getId());
+        model.addAttribute("id", quiz2Form.getId());
 
-        quizForm.setNewQuiz(false);
+        quiz2Form.setNewQuiz(false);
 
-        model.addAttribute("quizForm", quizForm);
+        model.addAttribute("quiz2Form", quiz2Form);
 
         model.addAttribute("title", "更新用フォーム");
     }
@@ -134,13 +138,13 @@ public class Quiz2Controller {
     /** idをKeyにしてデータを更新する */
     @PostMapping("/update")
     public String update(
-            @Validated Quiz2Form quizForm,
+            @Validated Quiz2Form quiz2Form,
             BindingResult result,
             Model model,
             RedirectAttributes redirectAttributes) {
 
         // Quiz2FormからQuizに詰め直す
-        Quiz2 quiz2 = makeQuiz(quizForm);
+        Quiz2 quiz2 = makeQuiz(quiz2Form);
 
         // 入力チェック
         if (!result.hasErrors()) {
@@ -158,7 +162,7 @@ public class Quiz2Controller {
         } else {
 
             // 更新用のModelを作成する
-            makeUpdateModel(quizForm, model);
+            makeUpdateModel(quiz2Form, model);
 
             return "quiz2/crud2";
         }
@@ -167,14 +171,14 @@ public class Quiz2Controller {
     /* ---------- 以下はFormとDomainObjectの詰めなおし ---------- */
 
     /** Quiz2FormからQuizに詰め直して戻り値として返します */
-    private Quiz2 makeQuiz(Quiz2Form quizForm) {
+    private Quiz2 makeQuiz(Quiz2Form quiz2Form) {
 
         Quiz2 quiz2 = new Quiz2();
 
-        quiz2.setId(quizForm.getId());
-        quiz2.setQuestion(quizForm.getQuestion());
-        quiz2.setAnswer(quizForm.getAnswer());
-        quiz2.setAuthor(quizForm.getAuthor());
+        quiz2.setId(quiz2Form.getId());
+        quiz2.setQuestion(quiz2Form.getQuestion());
+        quiz2.setAnswer(quiz2Form.getAnswer());
+        quiz2.setAuthor(quiz2Form.getAuthor());
 
         return quiz2;
     }
@@ -224,10 +228,10 @@ public class Quiz2Controller {
         if (quizOpt.isPresent()) {
 
             // Quiz2Formへの詰め直し
-            Optional<Quiz2Form> quizFormOpt =
+            Optional<Quiz2Form> quiz2FormOpt =
                     quizOpt.map(t -> makeQuiz2Form(t));
 
-            quiz2Form = quizFormOpt.get();
+            quiz2Form = quiz2FormOpt.get();
 
         } else {
 
@@ -237,7 +241,7 @@ public class Quiz2Controller {
         }
 
         // 表示用「Model」への格納
-        model.addAttribute("quizForm", quiz2Form);
+        model.addAttribute("quiz2Form", quiz2Form);
 
         return "quiz2/play2";
     }
@@ -316,5 +320,64 @@ public class Quiz2Controller {
         model.addAttribute("answers", quiz10Form.getAnswers());
 
         return "quiz2/result10";
+    }
+    
+    /** 2択問題CSVアップロード画面を表示する */
+    @GetMapping("/csv-upload2")
+    public String showCsvUpload2() {
+        return "quiz2/csvUpload2";
+    }
+
+    /** 2択問題CSVを読み込んで登録する */
+    @PostMapping("/csv-upload")
+    public String uploadCsv2(
+            @RequestParam("file") MultipartFile file,
+            Model model) {
+
+        if (file.isEmpty()) {
+            model.addAttribute("error", "CSVファイルを選択してください。");
+            return "quiz2/csvUpload2";
+        }
+
+        int count = 0;
+
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+
+            String line;
+            boolean firstLine = true;
+
+            while ((line = br.readLine()) != null) {
+
+                if (firstLine) {
+                    firstLine = false;
+                    continue;
+                }
+
+                String[] data = line.split(",");
+
+                if (data.length < 3) {
+                    continue;
+                }
+
+                Quiz2 quiz2 = new Quiz2();
+
+                quiz2.setQuestion(data[0]);
+                quiz2.setAnswer(Boolean.parseBoolean(data[1]));
+                quiz2.setAuthor(data[2]);
+
+                service.insertQuiz(quiz2);
+
+                count++;
+            }
+
+        } catch (Exception e) {
+            model.addAttribute("error", "CSV登録中にエラーが発生しました。");
+            return "quiz2/csvUpload2";
+        }
+
+        model.addAttribute("msg", count + "件の2択問題を登録しました。");
+
+        return "quiz2/csvUpload2";
     }
 }

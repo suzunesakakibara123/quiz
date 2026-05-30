@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>4択問題CSV登録</title>
+</head>
+
+<body>
+
+    <h1>4択問題CSV登録</h1>
+
+    <p th:if="${msg}" th:text="${msg}" style="color:blue"></p>
+    <p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+    <form th:action="@{/menu/quiz4/csv-upload}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <p>CSVファイルを選択してください。</p>
+
+        <input type="file"
+               name="file"
+               accept=".csv">
+
+        <br><br>
+
+        <button type="submit">CSVを登録する</button>
+
+    </form>
+
+    <hr>
+
+    <h3>CSV形式</h3>
+
+    <pre>question,choice1,choice2,choice3,choice4,answer,author
+Javaで継承に使うキーワードは？,implements,extends,return,static,2,山田太郎
+HTMLの見出しタグは？,p,h1,img,a,2,山田太郎</pre>
+
+    <p>
+        <a th:href="@{/menu/quiz4/create}">4択問題登録画面へ戻る</a>
+    </p>
+
+</body>
+
+</html>

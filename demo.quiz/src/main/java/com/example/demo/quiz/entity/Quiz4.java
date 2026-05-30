@@ -29,4 +29,6 @@ public class Quiz4 {
     private Integer answer;
 
     private String explanation;
+    
+    private String author;
 }

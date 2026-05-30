@@ -22,12 +22,12 @@
 
     <th:block th:unless="${msg}">
 
-        <p th:text="${quizForm.question}">
+        <p th:text="${quiz2Form.question}">
             クイズ内容
         </p>
 
         <form th:action="@{/quiz2/check2}"
-              th:object="${quizForm}"
+              th:object="${quiz2Form}"
               method="POST">
 
             <input type="hidden" th:field="*{id}">

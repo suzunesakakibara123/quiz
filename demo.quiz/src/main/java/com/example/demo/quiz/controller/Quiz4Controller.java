@@ -15,25 +15,18 @@ import com.example.demo.quiz.entity.Quiz4;
 import com.example.demo.quiz.service.Quiz4Service;
 
 @Controller
-@RequestMapping("/menu/quiz4")
+@RequestMapping("/quiz4")
 public class Quiz4Controller {
 
     @Autowired
     Quiz4Service service;
 
     /**
-     * /menu/quiz4 にアクセスされたら、4択問題Play画面へ移動する
-     */
-    @GetMapping
-    public String redirectToPlay4() {
-        return "redirect:/menu/quiz4/play4";
-    }
-
-    /**
      * 4択問題をランダムに1問表示する
      */
+
     @GetMapping("/play4")
-    public String showPlay(Model model) {
+    public String showQuiz4(Model model) {
         Quiz4 quiz4 = service.selectOneRandomQuiz4();
 
         if (quiz4 == null) {
@@ -60,7 +53,7 @@ public class Quiz4Controller {
     @PostMapping("/insert")
     public String insertQuiz4(@ModelAttribute Quiz4 quiz4) {
         service.insertQuiz4(quiz4);
-        return "redirect:/menu/quiz4/play4";
+        return "redirect:/quiz4/play4";
     }
 
     /**
@@ -84,7 +77,7 @@ public class Quiz4Controller {
     @PostMapping("/update")
     public String updateQuiz4(@ModelAttribute Quiz4 quiz4) {
         service.updateQuiz4(quiz4);
-        return "redirect:/menu/quiz4/play4";
+        return "redirect:/quiz4/play4";
     }
 
     /**
@@ -93,7 +86,7 @@ public class Quiz4Controller {
     @PostMapping("/delete/{id}")
     public String deleteQuiz4(@PathVariable Integer id) {
         service.deleteQuiz4ById(id);
-        return "redirect:/menu/quiz4/play4";
+        return "redirect:/quiz4/play4";
     }
 
     /**

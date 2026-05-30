@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>2択問題CSV登録</title>
+</head>
+
+<body>
+
+    <h1>2択問題CSV登録</h1>
+
+    <p th:if="${msg}" th:text="${msg}" style="color:blue"></p>
+    <p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+    <form th:action="@{/quiz2/csv-upload}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <p>CSVファイルを選択してください。</p>
+
+        <input type="file"
+               name="file"
+               accept=".csv">
+
+        <br><br>
+
+        <button type="submit">CSVを登録する</button>
+
+    </form>
+
+    <hr>
+
+    <h3>CSV形式</h3>
+
+    <pre>question,answer,author
+Javaはオブジェクト指向言語である。,true,山田太郎
+HTMLはプログラミング言語である。,false,山田太郎</pre>
+
+    <p>
+        <a th:href="@{/quiz2}">2択問題登録画面へ戻る</a>
+    </p>
+
+</body>
+
+</html>
