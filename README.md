@@ -1,3 +1,5 @@
+application.propertiesの6行目に、PostgreSQLパスワードを設定してご使用ください。
+
 【テーブル作成時のSQL文】
 （4択問題）
 CREATE TABLE quiz4 (
