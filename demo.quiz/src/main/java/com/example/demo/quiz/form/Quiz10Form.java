@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class Quiz10Form {
 
-    private List<QuizAnswerForm> answers;
+    private List<Quiz2AnswerForm> answers;
 }

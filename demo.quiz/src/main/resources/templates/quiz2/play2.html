@@ -16,7 +16,7 @@
 
         <p th:text="${msg}" style="color:red"></p>
 
-        <a th:href="@{/quiz/}">CRUD画面へ</a>
+        <a th:href="@{/quiz2/crud2}">CRUD画面へ</a>
 
     </th:block>
 
@@ -26,7 +26,7 @@
             クイズ内容
         </p>
 
-        <form th:action="@{/quiz/check}"
+        <form th:action="@{/quiz2/check2}"
               th:object="${quizForm}"
               method="POST">
 

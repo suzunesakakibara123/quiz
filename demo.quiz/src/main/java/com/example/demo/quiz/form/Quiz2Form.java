@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizForm {
+public class Quiz2Form {
 
     /** 識別ID */
     private Integer id;

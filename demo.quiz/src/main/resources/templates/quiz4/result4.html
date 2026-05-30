@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>4択クイズ結果</title>
+</head>
+<body>
+
+<h1>結果</h1>
+
+<div th:if="${result}">
+    <p>正解です！</p>
+</div>
+
+<div th:unless="${result}">
+    <p>不正解です。</p>
+</div>
+
+<h2>問題</h2>
+<p th:text="${quiz4.question}">問題文</p>
+
+<h2>あなたの解答</h2>
+<p th:text="${myAnswer}">あなたの解答</p>
+
+<h2>正解</h2>
+<p th:text="${quiz4.answer}">正解</p>
+
+<div th:if="${quiz4.explanation}">
+    <h2>解説</h2>
+    <p th:text="${quiz4.explanation}">解説</p>
+</div>
+
+<p>
+    <a th:href="@{/menu/quiz4/play4}">もう一度4択問題を解く</a>
+</p>
+
+<p>
+    <a th:href="@{/menu}">メニューに戻る</a>
+</p>
+
+</body>
+</html>

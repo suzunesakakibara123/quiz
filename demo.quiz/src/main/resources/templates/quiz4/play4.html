@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>4択クイズ</title>
+</head>
+<body>
+
+<h1>4択クイズ</h1>
+
+<p th:if="${msg}" th:text="${msg}"></p>
+
+<div th:if="${quiz4}">
+
+    <p th:text="${quiz4.question}">ここに問題文が表示されます</p>
+
+    <form th:action="@{/menu/quiz4/result}" method="post">
+
+        <input type="hidden" name="id" th:value="${quiz4.id}">
+
+        <div>
+            <label>
+                <input type="radio" name="myAnswer" value="1" required>
+                <span th:text="${quiz4.choice1}">選択肢1</span>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="radio" name="myAnswer" value="2">
+                <span th:text="${quiz4.choice2}">選択肢2</span>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="radio" name="myAnswer" value="3">
+                <span th:text="${quiz4.choice3}">選択肢3</span>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="radio" name="myAnswer" value="4">
+                <span th:text="${quiz4.choice4}">選択肢4</span>
+            </label>
+        </div>
+
+        <button type="submit">解答する</button>
+    </form>
+
+</div>
+
+<p>
+    <a th:href="@{/menu}">メニューに戻る</a>
+</p>
+
+<p>
+    <a th:href="@{/menu/quiz4/create}">4択問題を新規作成する</a>
+</p>
+
+</body>
+</html>

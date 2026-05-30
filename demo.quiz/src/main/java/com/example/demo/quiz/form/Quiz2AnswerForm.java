@@ -3,7 +3,7 @@ package com.example.demo.quiz.form;
 import lombok.Data;
 
 @Data
-public class QuizAnswerForm {
+public class Quiz2AnswerForm {
 
     // 問題のid
     private Integer id;

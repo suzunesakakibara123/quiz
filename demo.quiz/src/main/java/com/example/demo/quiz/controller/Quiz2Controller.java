@@ -15,26 +15,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.quiz.entity.Quiz;
+import com.example.demo.quiz.entity.Quiz2;
 import com.example.demo.quiz.form.Quiz10Form;
-import com.example.demo.quiz.form.QuizAnswerForm;
-import com.example.demo.quiz.form.QuizForm;
-import com.example.demo.quiz.service.QuizService;
+import com.example.demo.quiz.form.Quiz2AnswerForm;
+import com.example.demo.quiz.form.Quiz2Form;
+import com.example.demo.quiz.service.Quiz2Service;
 
 /** Quizコントローラ */
 @Controller
-@RequestMapping("/quiz")
-public class QuizController {
+@RequestMapping("/quiz2")
+public class Quiz2Controller {
 
     /** DI対象 */
     @Autowired
-    QuizService service;
+    Quiz2Service service;
 
     /** 「form-backing bean」の初期化 */
     @ModelAttribute
-    public QuizForm setUpForm() {
+    public Quiz2Form setUpForm() {
 
-        QuizForm form = new QuizForm();
+        Quiz2Form form = new Quiz2Form();
 
         // ラジオボタンのデフォルト値設定
         form.setAnswer(true);
@@ -44,46 +44,46 @@ public class QuizController {
 
     /** Quizの一覧を表示します */
     @GetMapping
-    public String showList(QuizForm quizForm, Model model) {
+    public String showList(Quiz2Form quizForm, Model model) {
 
         // 新規登録設定
         quizForm.setNewQuiz(true);
 
-        // 掲示板の一覧を取得する
-        Iterable<Quiz> list = service.selectAll();
+        // クイズの一覧を取得する
+        Iterable<Quiz2> list = service.selectAllQuiz2();
 
         // 表示用「Model」への格納
         model.addAttribute("list", list);
         model.addAttribute("title", "登録用フォーム");
 
-        return "crud";
+        return "quiz2/crud2";
     }
-    
+
     /** Quizデータを1件挿入 */
     @PostMapping("/insert")
     public String insert(
-            @Validated QuizForm quizForm,
+            @Validated Quiz2Form quizForm,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
 
         // FormからEntityへの詰め替え
-        Quiz quiz = new Quiz();
+        Quiz2 quiz2 = new Quiz2();
 
-        quiz.setQuestion(quizForm.getQuestion());
-        quiz.setAnswer(quizForm.getAnswer());
-        quiz.setAuthor(quizForm.getAuthor());
+        quiz2.setQuestion(quizForm.getQuestion());
+        quiz2.setAnswer(quizForm.getAnswer());
+        quiz2.setAuthor(quizForm.getAuthor());
 
         // 入力チェック
         if (!bindingResult.hasErrors()) {
 
-            service.insertQuiz(quiz);
+            service.insertQuiz(quiz2);
 
             redirectAttributes.addFlashAttribute(
                     "complete",
                     "登録が完了しました");
 
-            return "redirect:/quiz";
+            return "redirect:/quiz2";
 
         } else {
 
@@ -91,21 +91,22 @@ public class QuizController {
             return showList(quizForm, model);
         }
     }
+
     /** Quizデータを1件取得し、フォーム内に表示する */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     public String showUpdate(
-            QuizForm quizForm,
+            Quiz2Form quizForm,
             @PathVariable Integer id,
             Model model) {
 
         // Quizを取得(Optionalでラップ)
-        Optional<Quiz> quizOpt = service.selectOneById(id);
+        Optional<Quiz2> quizOpt = service.selectOneById(id);
 
-        // QuizFormへの詰め直し
-        Optional<QuizForm> quizFormOpt =
-                quizOpt.map(t -> makeQuizForm(t));
+        // Quiz2Formへの詰め直し
+        Optional<Quiz2Form> quizFormOpt =
+                quizOpt.map(t -> makeQuiz2Form(t));
 
-        // QuizFormがnullでなければ中身を取り出す
+        // Quiz2Formがnullでなければ中身を取り出す
         if (quizFormOpt.isPresent()) {
             quizForm = quizFormOpt.get();
         }
@@ -113,12 +114,12 @@ public class QuizController {
         // 更新用のModelを作成する
         makeUpdateModel(quizForm, model);
 
-        return "crud";
+        return "quiz2/crud2";
     }
 
     /** 更新用のModelを作成する */
     private void makeUpdateModel(
-            QuizForm quizForm,
+            Quiz2Form quizForm,
             Model model) {
 
         model.addAttribute("id", quizForm.getId());
@@ -133,65 +134,66 @@ public class QuizController {
     /** idをKeyにしてデータを更新する */
     @PostMapping("/update")
     public String update(
-            @Validated QuizForm quizForm,
+            @Validated Quiz2Form quizForm,
             BindingResult result,
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        // QuizFormからQuizに詰め直す
-        Quiz quiz = makeQuiz(quizForm);
+        // Quiz2FormからQuizに詰め直す
+        Quiz2 quiz2 = makeQuiz(quizForm);
 
         // 入力チェック
         if (!result.hasErrors()) {
 
             // 更新処理、フラッシュスコープの使用、リダイレクト
-            service.updateQuiz(quiz);
+            service.updateQuiz(quiz2);
 
             redirectAttributes.addFlashAttribute(
                     "complete",
                     "更新が完了しました");
 
             // 更新画面を表示する
-            return "redirect:/quiz/" + quiz.getId();
+            return "redirect:/quiz2/" + quiz2.getId();
 
         } else {
 
             // 更新用のModelを作成する
             makeUpdateModel(quizForm, model);
 
-            return "crud";
+            return "quiz2/crud2";
         }
     }
 
     /* ---------- 以下はFormとDomainObjectの詰めなおし ---------- */
 
-    /** QuizFormからQuizに詰め直して戻り値として返します */
-    private Quiz makeQuiz(QuizForm quizForm) {
+    /** Quiz2FormからQuizに詰め直して戻り値として返します */
+    private Quiz2 makeQuiz(Quiz2Form quizForm) {
 
-        Quiz quiz = new Quiz();
+        Quiz2 quiz2 = new Quiz2();
 
-        quiz.setId(quizForm.getId());
-        quiz.setQuestion(quizForm.getQuestion());
-        quiz.setAnswer(quizForm.getAnswer());
-        quiz.setAuthor(quizForm.getAuthor());
+        quiz2.setId(quizForm.getId());
+        quiz2.setQuestion(quizForm.getQuestion());
+        quiz2.setAnswer(quizForm.getAnswer());
+        quiz2.setAuthor(quizForm.getAuthor());
 
-        return quiz;
+        return quiz2;
     }
 
-    /** QuizからQuizFormに詰め直して戻り値として返します */
-    private QuizForm makeQuizForm(Quiz quiz) {
+    /** QuizからQuiz2Formに詰め直して戻り値として返します */
+    private Quiz2Form makeQuiz2Form(Quiz2 quiz2) {
 
-        QuizForm form = new QuizForm();
+        Quiz2Form form = new Quiz2Form();
 
-        form.setId(quiz.getId());
-        form.setQuestion(quiz.getQuestion());
-        form.setAnswer(quiz.getAnswer());
-        form.setAuthor(quiz.getAuthor());
+        form.setId(quiz2.getId());
+        form.setQuestion(quiz2.getQuestion());
+        form.setAnswer(quiz2.getAnswer());
+        form.setAuthor(quiz2.getAuthor());
 
         form.setNewQuiz(false);
 
         return form;
     }
+
     /** idをKeyにしてデータを削除する */
     @PostMapping("/delete")
     public String delete(
@@ -206,45 +208,66 @@ public class QuizController {
                 "delcomplete",
                 "削除が完了しました");
 
-        return "redirect:/quiz";
+        return "redirect:/quiz2";
     }
+
     /* ---------- 以下はクイズで遊ぶ機能 ---------- */
 
     /** Quizデータをランダムで1件取得し、画面に表示する */
-    @GetMapping("/play")
-    public String showQuiz(QuizForm quizForm, Model model) {
+    @GetMapping("/play2")
+    public String showQuiz(Quiz2Form quiz2Form, Model model) {
 
         // Quizを取得(Optionalでラップ)
-        Optional<Quiz> quizOpt = service.selectOneRandomQuiz();
+        Optional<Quiz2> quizOpt = service.selectOneRandomQuiz2();
 
         // 値が入っているか判定する
         if (quizOpt.isPresent()) {
 
-            // QuizFormへの詰め直し
-            Optional<QuizForm> quizFormOpt =
-                    quizOpt.map(t -> makeQuizForm(t));
+            // Quiz2Formへの詰め直し
+            Optional<Quiz2Form> quizFormOpt =
+                    quizOpt.map(t -> makeQuiz2Form(t));
 
-            quizForm = quizFormOpt.get();
+            quiz2Form = quizFormOpt.get();
 
         } else {
 
             model.addAttribute("msg", "問題がありません・・・");
 
-            return "play";
+            return "quiz2/play2";
         }
 
         // 表示用「Model」への格納
-        model.addAttribute("quizForm", quizForm);
+        model.addAttribute("quizForm", quiz2Form);
 
-        return "play";
+        return "quiz2/play2";
     }
-    
-    /** Quizデータをランダムで1件取得し、画面に表示する */
+    /** 1問クイズの正解・不正解を判定する */
+    @PostMapping("/check2")
+    public String checkQuiz2(
+            Quiz2Form quiz2Form,
+            @RequestParam Boolean answer,
+            Model model) {
+
+        // 正解・不正解を判定する
+        boolean result = service.checkQuiz(
+                quiz2Form.getId(),
+                answer);
+
+        if (result) {
+            model.addAttribute("msg", "正解です！");
+        } else {
+            model.addAttribute("msg", "不正解です・・・");
+        }
+
+        return "quiz2/result2";
+    }
+
+    /** Quizデータをランダムで10件取得し、画面に表示する */
     @GetMapping("/play10")
     public String showQuiz10(Model model) {
 
         // Serviceからランダムに10問取得し、複数件扱える型のquizListに入れる
-        Iterable<Quiz> quizList = service.findRandom10Quiz();
+        Iterable<Quiz2> quizList = service.findRandom10Quiz2();
 
         // 取得した10問のクイズをHTMLに渡す
         model.addAttribute("quizList", quizList);
@@ -253,9 +276,10 @@ public class QuizController {
         model.addAttribute("quiz10Form", new Quiz10Form());
 
         // play10.htmlを表示させる
-        return "play10";
+        return "quiz2/play10";
     }
 
+    /** 10問回答の正解数を判定する */
     @PostMapping("/check10")
     public String checkQuiz10(
             Quiz10Form quiz10Form,
@@ -264,26 +288,21 @@ public class QuizController {
         int correctCount = 0;
         int answerCount = 0;
 
-        System.out.println("=== 10問回答チェック開始 ===");
+        for (Quiz2AnswerForm answer : quiz10Form.getAnswers()) {
 
-        for (QuizAnswerForm answer : quiz10Form.getAnswers()) {
-
-            System.out.println("id = " + answer.getId());
-            System.out.println("myAnswer = " + answer.getMyAnswer());
-
-            // idがnullなら採点しない
             if (answer.getId() == null) {
                 continue;
             }
 
-            // 回答が未選択なら採点しない
             if (answer.getMyAnswer() == null) {
                 continue;
             }
 
             answerCount++;
 
-            boolean result = service.checkQuiz(answer.getId(), answer.getMyAnswer());
+            boolean result = service.checkQuiz(
+                    answer.getId(),
+                    answer.getMyAnswer());
 
             answer.setCorrect(result);
 
@@ -292,16 +311,10 @@ public class QuizController {
             }
         }
 
-        System.out.println("=== 10問回答チェック終了 ===");
-
         model.addAttribute("correctCount", correctCount);
         model.addAttribute("totalCount", answerCount);
         model.addAttribute("answers", quiz10Form.getAnswers());
 
-        return "result10";
-
+        return "quiz2/result10";
     }
-    
-   
-   
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>4択問題作成</title>
+</head>
+<body>
+
+<h1>4択問題作成</h1>
+
+<form th:action="@{/menu/quiz4/insert}" th:object="${quiz4}" method="post">
+
+    <div>
+        <label>問題文：</label>
+        <input type="text" th:field="*{question}" required>
+    </div>
+
+    <div>
+        <label>選択肢1：</label>
+        <input type="text" th:field="*{choice1}" required>
+    </div>
+
+    <div>
+        <label>選択肢2：</label>
+        <input type="text" th:field="*{choice2}" required>
+    </div>
+
+    <div>
+        <label>選択肢3：</label>
+        <input type="text" th:field="*{choice3}" required>
+    </div>
+
+    <div>
+        <label>選択肢4：</label>
+        <input type="text" th:field="*{choice4}" required>
+    </div>
+
+    <div>
+        <label>正解番号：</label>
+        <select th:field="*{answer}" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+    </div>
+
+    <div>
+        <label>解説：</label>
+        <input type="text" th:field="*{explanation}">
+    </div>
+
+    <button type="submit">登録する</button>
+
+</form>
+
+<p>
+    <a th:href="@{/menu/quiz4/play4}">4択問題に戻る</a>
+</p>
+
+<p>
+    <a th:href="@{/menu}">メニューに戻る</a>
+</p>
+
+</body>
+</html>

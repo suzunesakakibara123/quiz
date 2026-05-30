@@ -6,29 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.quiz.entity.Quiz;
-import com.example.demo.quiz.repository.QuizRepository;
+import com.example.demo.quiz.entity.Quiz2;
+import com.example.demo.quiz.repository.Quiz2Repository;
 
 @Service
 @Transactional
-public class QuizServiceImpl implements QuizService {
+public class Quiz2ServiceImpl implements Quiz2Service {
 
     /** Repositoryの注入 */
     @Autowired
-    QuizRepository repository;
+    Quiz2Repository repository;
 
     @Override
-    public Iterable<Quiz> selectAll() {
+    public Iterable<Quiz2> selectAllQuiz2() {
         return repository.findAll();
     }
 
     @Override
-    public Optional<Quiz> selectOneById(Integer id) {
+    public Optional<Quiz2> selectOneById(Integer id) {
         return repository.findById(id);
     }
 
     @Override
-    public Optional<Quiz> selectOneRandomQuiz() {
+    public Optional<Quiz2> selectOneRandomQuiz2() {
 
         // ランダムでidの値を取得する
         Integer randId = repository.getRandomId();
@@ -46,12 +46,12 @@ public class QuizServiceImpl implements QuizService {
 
         Boolean check = false;
 
-        Optional<Quiz> optQuiz = repository.findById(id);
+        Optional<Quiz2> quiz2Opt = repository.findById(id);
 
-        if (optQuiz.isPresent()) {
-            Quiz quiz = optQuiz.get();
+        if (quiz2Opt.isPresent()) {
+            Quiz2 quiz2 = quiz2Opt.get();
 
-            if (quiz.getAnswer().equals(myAnswer)) {
+            if (quiz2.getAnswer().equals(myAnswer)) {
                 check = true;
             }
         }
@@ -60,13 +60,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void insertQuiz(Quiz quiz) {
-        repository.save(quiz);
+    public void insertQuiz(Quiz2 quiz2) {
+        repository.save(quiz2
+        		);
     }
 
     @Override
-    public void updateQuiz(Quiz quiz) {
-        repository.save(quiz);
+    public void updateQuiz(Quiz2 quiz2) {
+        repository.save(quiz2);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Iterable<Quiz> findRandom10Quiz() {
-        return repository.findRandom10Quiz();
+    public Iterable<Quiz2> findRandom10Quiz2() {
+        return repository.findRandom10Quiz2();
     }
 }

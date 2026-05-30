@@ -17,8 +17,8 @@
 
     <!--/* ▼▼▼ Form ▼▼▼ */-->
     <form method="POST"
-          th:action="${quizForm.newQuiz} ? @{/quiz/insert} : @{/quiz/update}"
-          th:object="${quizForm}">
+          th:action="${quiz2Form.newQuiz} ? @{/quiz2/insert} : @{/quiz2/update}"
+          th:object="${quiz2Form}">
 
         <label>クイズの内容：</label><br>
 
@@ -69,11 +69,11 @@
     <!--/* ========== ここから下部エリア ========== */-->
 
     <!--/* ▼▼▼ 新規登録時のみ表示 ▼▼▼ */-->
-    <div th:if="${quizForm.newQuiz}" style="margin: 10px">
+    <div th:if="${quiz2Form.newQuiz}" style="margin: 10px">
 
         <h3>
             登録クイズ一覧：
-            <a th:href="@{/quiz/play}">プレイ</a><br>
+            <a th:href="@{/quiz2/play2}">プレイ</a><br>
         </h3>
 
         <!--/* 削除完了コメント */-->
@@ -116,7 +116,7 @@
                 <td>
 
                     <form method="GET"
-                          th:action="@{/quiz/{id}(id=${obj.id})}">
+                          th:action="@{/quiz2/{id}(id=${obj.id})}">
 
                         <input type="submit" value="編集">
 
@@ -128,7 +128,7 @@
                 <td>
 
                     <form method="POST"
-                          th:action="@{/quiz/delete}">
+                          th:action="@{/quiz2/delete}">
 
                         <input type="hidden"
                                name="id"
@@ -160,8 +160,8 @@
 
     <!--/* ▼▼▼ 新規登録時でない時に表示 ▼▼▼ */-->
 
-    <p th:unless="${quizForm.newQuiz}">
-        <a href="#" th:href="@{/quiz}">CRUD画面へ戻る</a>
+    <p th:unless="${quiz2Form.newQuiz}">
+        <a href="#" th:href="@{/quiz2/crud2}">CRUD画面へ戻る</a>
     </p>
 
     <!--/* △△△ 新規登録時でない時に表示 △△△ */-->
