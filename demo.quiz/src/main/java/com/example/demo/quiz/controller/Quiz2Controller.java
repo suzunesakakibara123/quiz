@@ -323,7 +323,7 @@ public class Quiz2Controller {
     }
     
     /** 2択問題CSVアップロード画面を表示する */
-    @GetMapping("/csv-upload2")
+    @GetMapping("/csv-upload")
     public String showCsvUpload2() {
         return "quiz2/csvUpload2";
     }

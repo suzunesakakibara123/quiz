@@ -14,7 +14,7 @@
 
     <p th:text="${quiz4.question}">ここに問題文が表示されます</p>
 
-    <form th:action="@{/menu/quiz4/result}" method="post">
+    <form th:action="@{/quiz4/result}" method="post">
 
         <input type="hidden" name="id" th:value="${quiz4.id}">
 
@@ -53,10 +53,6 @@
 
 <p>
     <a th:href="@{/menu}">メニューに戻る</a>
-</p>
-
-<p>
-    <a th:href="@{/menu/quiz4/create}">4択問題を新規作成する</a>
 </p>
 
 </body>

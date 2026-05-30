@@ -8,7 +8,7 @@
 
 <h1>4択問題作成</h1>
 
-<form th:action="@{/menu/quiz4/insert}" th:object="${quiz4}" method="post">
+<form th:action="@{/quiz4/insert}" th:object="${quiz4}" method="post">
 
     <div>
         <label>問題文：</label>
@@ -53,10 +53,6 @@
     <button type="submit">登録する</button>
 
 </form>
-
-<p>
-    <a th:href="@{/menu/quiz4/play4}">4択問題に戻る</a>
-</p>
 
 <p>
     <a th:href="@{/menu}">メニューに戻る</a>

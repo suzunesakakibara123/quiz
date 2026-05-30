@@ -1,5 +1,8 @@
 package com.example.demo.quiz.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.quiz.entity.Quiz4;
 import com.example.demo.quiz.service.Quiz4Service;
@@ -101,5 +106,72 @@ public class Quiz4Controller {
         model.addAttribute("myAnswer", myAnswer);
 
         return "quiz4/result4";
+    }
+    
+    /**
+     * 4択問題CSVアップロード画面を表示する
+     */
+    @GetMapping("/csv-upload")
+    public String showCsvUpload4() {
+        return "quiz4/csvUpload4";
+    }
+
+    /**
+     * 4択問題CSVを読み込んで登録する
+     */
+    @PostMapping("/csv-upload")
+    public String uploadCsv4(
+            @RequestParam("file") MultipartFile file,
+            Model model) {
+
+        if (file.isEmpty()) {
+            model.addAttribute("error", "CSVファイルを選択してください。");
+            return "quiz4/csvUpload4";
+        }
+
+        int count = 0;
+
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+
+            String line;
+            boolean firstLine = true;
+
+            while ((line = br.readLine()) != null) {
+
+                if (firstLine) {
+                    firstLine = false;
+                    continue;
+                }
+
+                String[] data = line.split(",");
+
+                if (data.length < 7) {
+                    continue;
+                }
+
+                Quiz4 quiz4 = new Quiz4();
+
+                quiz4.setQuestion(data[0]);
+                quiz4.setChoice1(data[1]);
+                quiz4.setChoice2(data[2]);
+                quiz4.setChoice3(data[3]);
+                quiz4.setChoice4(data[4]);
+                quiz4.setAnswer(Integer.parseInt(data[5]));
+                quiz4.setAuthor(data[6]);
+
+                service.insertQuiz4(quiz4);
+
+                count++;
+            }
+
+        } catch (Exception e) {
+            model.addAttribute("error", "CSV登録中にエラーが発生しました。");
+            return "quiz4/csvUpload4";
+        }
+
+        model.addAttribute("msg", count + "件の4択問題を登録しました。");
+
+        return "quiz4/csvUpload4";
     }
 }
