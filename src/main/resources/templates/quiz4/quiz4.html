@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>4択問題一覧</title>
+</head>
+<body>
+
+<h1>4択問題一覧</h1>
+
+<a th:href="@{/menu/quiz4/create}">新規作成</a>
+<a th:href="@{/menu/quiz4/play4}">4択問題をPlay</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>問題文</th>
+        <th>選択肢1</th>
+        <th>選択肢2</th>
+        <th>選択肢3</th>
+        <th>選択肢4</th>
+        <th>正解</th>
+        <th>編集</th>
+        <th>削除</th>
+    </tr>
+
+    <tr th:each="quiz4 : ${quiz4List}">
+        <td th:text="${quiz4.id}"></td>
+        <td th:text="${quiz4.question}"></td>
+        <td th:text="${quiz4.choice1}"></td>
+        <td th:text="${quiz4.choice2}"></td>
+        <td th:text="${quiz4.choice3}"></td>
+        <td th:text="${quiz4.choice4}"></td>
+        <td th:text="${quiz4.answer}"></td>
+        <td>
+            <a th:href="@{/menu/quiz4/edit/{id}(id=${quiz4.id})}">編集</a>
+        </td>
+        <td>
+            <form th:action="@{/menu/quiz4/delete/{id}(id=${quiz4.id})}" method="post">
+                <button type="submit">削除</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>10問クイズ</title>
+
+    <style>
+        .answer-radio {
+            display: none;
+        }
+
+        .answer-button {
+            display: inline-block;
+            padding: 8px 14px;
+            margin: 4px;
+            border: 1px solid #999;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .answer-radio:checked + .answer-button {
+            background-color: #dbeafe;
+            border-color: #2563eb;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>10問クイズ</h1>
+
+<p th:if="${msg}" th:text="${msg}"></p>
+
+<th:block th:unless="${msg}">
+
+    <form th:action="@{/quiz2/check10}" method="post">
+
+        <div th:each="quiz, stat : ${quizList}">
+
+            <h3 th:text="${stat.count} + '問目'"></h3>
+
+            <p th:text="${quiz.question}"></p>
+
+            <input type="hidden"
+                   th:name="'answers[' + ${stat.index} + '].id'"
+                   th:value="${quiz.id}">
+
+            <div class="answer-buttons">
+
+                <input type="radio"
+                       th:id="'answerTrue' + ${stat.index}"
+                       th:name="'answers[' + ${stat.index} + '].myAnswer'"
+                       value="true"
+                       class="answer-radio">
+
+                <label th:for="'answerTrue' + ${stat.index}"
+                       class="answer-button">
+                    ○
+                </label>
+
+                <input type="radio"
+                       th:id="'answerFalse' + ${stat.index}"
+                       th:name="'answers[' + ${stat.index} + '].myAnswer'"
+                       value="false"
+                       class="answer-radio">
+
+                <label th:for="'answerFalse' + ${stat.index}"
+                       class="answer-button">
+                    ×
+                </label>
+
+            </div>
+
+            <hr>
+
+        </div>
+
+        <button type="submit">回答する</button>
+
+    </form>
+
+</th:block>
+
+</body>
+</html>

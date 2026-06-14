@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>2択問題メニュー</title>
+	<style>
+		*{font-size: 1rem;
+		  padding:0.5rem;
+		  margin:0.5rem;
+		  text-decoration: none;
+	  }
+		
+	</style>
+</head>
+
+<body>
+
+    <h1>2択問題メニュー</h1>
+
+    <a th:href="@{/quiz2/play2}">
+        <button type="button">1問ずつプレイ</button>
+    </a>
+	
+	<br>
+
+    <a th:href="@{/quiz2/play10}">
+        <button type="button">10問ずつプレイ</button>
+    </a>
+	
+	<br>
+
+    <a th:href="@{/quiz2}">
+        <button type="button">問題登録</button>
+    </a>
+	
+	<br>
+
+    <a th:href="@{/quiz2/csv-upload}">
+        <button type="button">CSVで問題登録</button>
+    </a>
+	
+	<br>
+
+
+    <p>
+        <a th:href="@{/menu}">クイズメニューに戻る</a>
+    </p>
+
+</body>
+
+</html>

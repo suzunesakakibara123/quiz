@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>4択問題メニュー</title>
+	<style>
+			*{font-size: 1rem;
+			  padding:0.5rem;
+			  text-decoration: none;
+		  }
+		</style>
+</head>
+
+<body>
+
+    <h1>4択問題メニュー</h1>
+
+    <a th:href="@{/quiz4/play4}">
+        <button type="button">プレイ</button>
+    </a>
+
+    <br><br>
+
+    <a th:href="@{/quiz4/create}">
+        <button type="button">問題登録</button>
+    </a>
+
+    <br><br>
+
+    <a th:href="@{/quiz4/csv-upload}">
+        <button type="button">CSVで問題登録</button>
+    </a>
+
+    <p>
+        <a th:href="@{/menu}">クイズメニューに戻る</a>
+    </p>
+
+</body>
+
+</html>
