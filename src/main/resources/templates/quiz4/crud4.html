@@ -1,62 +1,475 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>4択問題作成</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>4択問題管理</title>
+
+	<style>
+	    body {
+	        margin: 20px;
+	        font-family: Arial,
+	                     "Hiragino Kaku Gothic ProN",
+	                     "Yu Gothic",
+	                     sans-serif;
+	        color: #333333;
+	    }
+
+	    .container {
+	        max-width: 1100px;
+	        margin: 0 auto;
+	        box-sizing: border-box;
+	    }
+
+	    h1 {
+	        margin-bottom: 24px;
+	        border-bottom: 2px solid #333333;
+	    }
+
+	    h2,
+	    h3 {
+	        margin-top: 20px;
+	        margin-bottom: 14px;
+	    }
+
+	    .message-success {
+	        margin-bottom: 16px;
+	        color: #0066cc;
+	        font-weight: bold;
+	    }
+
+	    .message-error {
+	        margin-bottom: 16px;
+	        color: #cc0000;
+	        font-weight: bold;
+	    }
+
+	    .form-area {
+	        margin-bottom: 36px;	 
+	        border-radius: 6px;
+	    }
+
+	    .form-inner {
+	        margin: 20px;
+	    }
+
+	    .form-row {
+	        display: flex;
+	        align-items: center;
+	        margin-bottom: 14px;
+	    }
+
+	    .form-row label {
+	        width: 110px;
+	        font-weight: bold;
+	    }
+
+	    .form-row input[type="text"],
+	    .form-row select {
+	        flex: 1;
+	        min-width: 0;
+	        height: 36px;
+	        box-sizing: border-box;
+	        border: 1px solid #999999;
+	        border-radius: 4px;
+	        font-size: 15px;
+	    }
+
+	    .button-area {
+	        margin-top: 20px;
+	        margin-bottom: 20px;
+	    }
+
+	    /* 登録・更新ボタン */
+	    .submit-button {
+	        min-width: 100px;
+	        height: 38px;
+	        border: 1px solid #555555;
+	        border-radius: 4px;
+	        cursor: pointer;
+	        font-size: 14px;
+	        color: #333333;
+	    }
+
+	    /* 編集キャンセルボタン */
+	    .cancel-button {
+	        display: inline-block;
+	        min-width: 100px;
+	        height: 38px;
+	        margin-left: 8px;
+	        border: 1px solid #555555;
+	        border-radius: 4px;
+	        box-sizing: border-box;
+	        color: #333333;
+	        text-align: center;
+	        text-decoration: none;
+	        line-height: 36px;
+	        font-size: 14px;
+	        cursor: pointer;
+	    }
+
+	    .play-link {
+	        display: inline-block;
+	        margin-bottom: 14px;
+			margin-right: 24px;
+			margin-left:8px;
+	    }
+
+	    .table-wrapper {
+	        width: 100%;
+	        overflow-x: auto;
+	    }
+
+	    .quiz-table {
+	        width: 100%;
+	        min-width: 950px;
+	        border-collapse: collapse;
+	        table-layout: fixed;
+	    }
+
+	    .quiz-table th,
+	    .quiz-table td {
+	        height: 46px;
+	        border: 1px solid #999999;
+	        word-break: break-word;
+	        overflow-wrap: anywhere;
+	        vertical-align: middle;
+	    }
+
+	    .quiz-table th:nth-child(1),
+	    .quiz-table td:nth-child(1) {
+	        width: 45px;
+	        text-align: center;
+	    }
+
+	    .quiz-table th:nth-child(2),
+	    .quiz-table td:nth-child(2) {
+	        width: 220px;
+	    }
+
+	    .quiz-table th:nth-child(3),
+	    .quiz-table td:nth-child(3),
+	    .quiz-table th:nth-child(4),
+	    .quiz-table td:nth-child(4),
+	    .quiz-table th:nth-child(5),
+	    .quiz-table td:nth-child(5),
+	    .quiz-table th:nth-child(6),
+	    .quiz-table td:nth-child(6) {
+	        width: 130px;
+	    }
+
+	    .quiz-table th:nth-child(7),
+	    .quiz-table td:nth-child(7) {
+	        width: 60px;
+	        text-align: center;
+	    }
+
+	    .quiz-table th:nth-child(8),
+	    .quiz-table td:nth-child(8),
+	    .quiz-table th:nth-child(9),
+	    .quiz-table td:nth-child(9) {
+	        width: 80px;
+	        text-align: center;
+	    }
+
+	    .quiz-table form {
+	        margin: 0;
+	    }
+
+	    /* 一覧内の編集・削除ボタン */
+	    .table-button {
+	        min-width: 58px;
+	        height: 32px;
+	        border: 1px solid #666666;
+	        border-radius: 4px;
+	        cursor: pointer;
+	        color: #333333;
+	    }
+
+	    .navigation {
+	        margin-top: 24px;
+	    }
+
+	    .navigation a {
+	        margin-right: 14px;
+	    }
+
+	    a {
+	        color: #0056b3;
+	    }
+
+	    @media screen and (max-width: 600px) {
+	        body {
+	            margin: 10px;
+	        }
+
+	        h1 {
+	            font-size: 24px;
+	        }
+
+	        .form-row {
+	            display: block;
+	        }
+
+	        .form-row label {
+	            display: block;
+	            width: auto;
+	            margin-bottom: 6px;
+	        }
+
+	        .form-row input[type="text"],
+	        .form-row select {
+	            width: 100%;
+	        }
+	    }
+	</style>
 </head>
+
 <body>
 
-<h1>4択問題作成</h1>
+<div class="container">
 
-<form th:action="@{/quiz4/insert}" th:object="${quiz4}" method="post">
+    <h1 th:text="${quiz4.id == null}
+        ? '4択問題登録'
+        : '4択問題編集'">
+        4択問題登録
+    </h1>
 
-    <div>
-        <label>問題文：</label>
-        <input type="text" th:field="*{question}" required>
+    <!-- 登録・更新成功メッセージ -->
+    <p class="message-success"
+       th:if="${msg}"
+       th:text="${msg}">
+    </p>
+
+    <!-- 登録・更新失敗メッセージ -->
+    <p class="message-error"
+       th:if="${errorMsg}"
+       th:text="${errorMsg}">
+    </p>
+
+    <!-- 登録・編集フォーム -->
+    <div class="form-area">
+
+        <form th:action="${quiz4.id == null}
+                ? @{/quiz4/insert}
+                : @{/quiz4/update}"
+              th:object="${quiz4}"
+              method="post">
+
+            <!-- 更新時にIDを送る -->
+            <input type="hidden"
+                   th:field="*{id}">
+
+            <div class="form-row">
+                <label for="question">問題文：</label>
+
+                <input type="text"
+                       id="question"
+                       th:field="*{question}"
+                       required>
+            </div>
+
+            <div class="form-row">
+                <label for="choice1">選択肢1：</label>
+
+                <input type="text"
+                       id="choice1"
+                       th:field="*{choice1}"
+                       required>
+            </div>
+
+            <div class="form-row">
+                <label for="choice2">選択肢2：</label>
+
+                <input type="text"
+                       id="choice2"
+                       th:field="*{choice2}"
+                       required>
+            </div>
+
+            <div class="form-row">
+                <label for="choice3">選択肢3：</label>
+
+                <input type="text"
+                       id="choice3"
+                       th:field="*{choice3}"
+                       required>
+            </div>
+
+            <div class="form-row">
+                <label for="choice4">選択肢4：</label>
+
+                <input type="text"
+                       id="choice4"
+                       th:field="*{choice4}"
+                       required>
+            </div>
+
+            <div class="form-row">
+                <label for="answer">正解：</label>
+
+                <select id="answer"
+                        th:field="*{answer}"
+                        required>
+
+                    <option value="">
+                        選択してください
+                    </option>
+
+                    <option value="1">
+                        選択肢1
+                    </option>
+
+                    <option value="2">
+                        選択肢2
+                    </option>
+
+                    <option value="3">
+                        選択肢3
+                    </option>
+
+                    <option value="4">
+                        選択肢4
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="button-area">
+
+                <input class="submit-button"
+                       type="submit"
+                       th:value="${quiz4.id == null}
+                           ? '登録'
+                           : '更新'">
+
+                <!-- 編集中のみ表示 -->
+                <a class="cancel-button"
+                   th:if="${quiz4.id != null}"
+                   th:href="@{/quiz4/create}">
+                    編集をキャンセル
+                </a>
+
+            </div>
+
+        </form>
+
     </div>
 
-    <div>
-        <label>選択肢1：</label>
-        <input type="text" th:field="*{choice1}" required>
+    <!-- 登録済み問題一覧 -->
+	<h3>
+    登録済みクイズ一覧：
+
+    <a class="play-link"
+       th:href="@{/quiz4/play4}">
+        プレイ
+    </a>
+	<a th:href="@{/menu}">
+	            メニュー画面へ
+    </a>
+	</h3>
+
+    <!-- データがある場合 -->
+    <div class="table-wrapper"
+         th:unless="${#lists.isEmpty(list)}">
+
+        <table class="quiz-table">
+
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>問題文</th>
+                <th>選択肢1</th>
+                <th>選択肢2</th>
+                <th>選択肢3</th>
+                <th>選択肢4</th>
+                <th>正解</th>
+                <th>編集</th>
+                <th>削除</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="obj : ${list}">
+
+                <td th:text="${obj.id}">
+                </td>
+
+                <td th:text="${obj.question}">
+                </td>
+
+                <td th:text="${obj.choice1}">
+                </td>
+
+                <td th:text="${obj.choice2}">
+                </td>
+
+                <td th:text="${obj.choice3}">
+                </td>
+
+                <td th:text="${obj.choice4}">
+                </td>
+
+                <td th:text="${obj.answer}">
+                </td>
+
+                <!-- 編集ボタン -->
+                <td>
+                    <form method="get"
+                          th:action="@{/quiz4/edit/{id}(id=${obj.id})}">
+
+                        <input class="table-button edit-button"
+                               type="submit"
+                               value="編集">
+
+                    </form>
+                </td>
+
+                <!-- 削除ボタン -->
+                <td>
+                    <form method="post"
+                          th:action="@{/quiz4/delete/{id}(id=${obj.id})}">
+
+                        <input class="table-button delete-button"
+                               type="submit"
+                               value="削除"
+                               onclick="return confirm('この問題を削除しますか？')">
+
+                    </form>
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
     </div>
 
-    <div>
-        <label>選択肢2：</label>
-        <input type="text" th:field="*{choice2}" required>
+    <!-- データがない場合 -->
+    <p th:if="${#lists.isEmpty(list)}">
+        登録されている4択問題はありません。
+    </p>
+
+    <!-- 画面移動 -->
+    <div class="navigation">
+
+        <a th:href="@{/quiz4/play4}">
+            プレイ画面へ
+        </a>
+
+        <a th:href="@{/menu}">
+            メニュー画面へ戻る
+        </a>
+
     </div>
 
-    <div>
-        <label>選択肢3：</label>
-        <input type="text" th:field="*{choice3}" required>
-    </div>
-
-    <div>
-        <label>選択肢4：</label>
-        <input type="text" th:field="*{choice4}" required>
-    </div>
-
-    <div>
-        <label>正解番号：</label>
-        <select th:field="*{answer}" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
-    </div>
-
-    <div>
-        <label>解説：</label>
-        <input type="text" th:field="*{explanation}">
-    </div>
-
-    <button type="submit">登録する</button>
-
-</form>
-
-<p>
-    <a th:href="@{/menu}">メニューに戻る</a>
-</p>
+</div>
 
 </body>
+
 </html>

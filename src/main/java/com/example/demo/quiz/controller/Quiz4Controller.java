@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.quiz.entity.Quiz4;
 import com.example.demo.quiz.service.Quiz4Service;
@@ -46,15 +47,32 @@ public class Quiz4Controller {
 
         model.addAttribute("quiz4", new Quiz4());
 
+        // 登録済みの4択問題一覧
+        model.addAttribute("list", service.selectAllQuiz4());
+
         return "quiz4/crud4";
     }
 
     @PostMapping("/insert")
-    public String insertQuiz4(@ModelAttribute Quiz4 quiz4) {
+    public String insertQuiz4(@ModelAttribute Quiz4 quiz4,RedirectAttributes redirectAttributes) {
 
-        service.insertQuiz4(quiz4);
+    	  try {
+    	        service.insertQuiz4(quiz4);
 
-        return "redirect:/quiz4/play4";
+    	        redirectAttributes.addFlashAttribute(
+    	                "msg",
+    	                "登録が完了しました。"
+    	        );
+
+    	    } catch (Exception e) {
+
+    	        redirectAttributes.addFlashAttribute(
+    	                "errorMsg",
+    	                "登録に失敗しました。"
+    	        );
+    	    }
+
+    	    return "redirect:/quiz4/create";
     }
 
     @GetMapping("/edit/{id}")
@@ -66,6 +84,8 @@ public class Quiz4Controller {
 
         if (quiz4Opt.isPresent()) {
             model.addAttribute("quiz4", quiz4Opt.get());
+         // 登録済み一覧
+            model.addAttribute("list", service.selectAllQuiz4());
             return "quiz4/crud4";
         }
 
@@ -73,11 +93,26 @@ public class Quiz4Controller {
     }
 
     @PostMapping("/update")
-    public String updateQuiz4(@ModelAttribute Quiz4 quiz4) {
+    public String updateQuiz4(@ModelAttribute Quiz4 quiz4,
+            RedirectAttributes redirectAttributes) {
 
-        service.updateQuiz4(quiz4);
+    	 try {
+    	        service.updateQuiz4(quiz4);
 
-        return "redirect:/quiz4/play4";
+    	        redirectAttributes.addFlashAttribute(
+    	                "msg",
+    	                "更新が完了しました。"
+    	        );
+
+    	    } catch (Exception e) {
+
+    	        redirectAttributes.addFlashAttribute(
+    	                "errorMsg",
+    	                "更新に失敗しました。"
+    	        );
+    	    }
+
+    	    return "redirect:/quiz4/create";
     }
 
     @PostMapping("/delete/{id}")

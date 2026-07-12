@@ -3,171 +3,476 @@
 
 <head>
     <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>○×クイズアプリ：CRUD</title>
+
+    <style>
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-bottom: 24px;
+            border-bottom: 2px solid #333333;
+        }
+
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 14px;
+        }
+
+        .form-area {
+            margin-bottom: 30px;
+            border-radius: 6px;
+        }
+
+        .form-inner {
+            margin: 20px;
+        }
+
+        .form-row {
+            margin-bottom: 18px;
+        }
+
+        .form-row label {
+            display: inline-block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            border: 1px solid #999999;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input[type="text"] {
+            height: 36px;
+        }
+
+        .radio-area {
+            margin-top: 4px;
+        }
+
+        .radio-area label {
+            margin-right: 20px;
+            font-weight: normal;
+        }
+
+        .error-message {
+            margin-top: 5px;
+            color: #cc0000;
+            font-size: 14px;
+        }
+
+        .message-success {
+            margin-bottom: 16px;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .message-error {
+            margin-bottom: 16px;
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        .submit-button {
+            min-width: 100px;
+            height: 38px;
+            border: 1px solid #555555;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        hr {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border: 0;
+            border-top: 1px solid #bbbbbb;
+        }
+
+        .list-area {
+            margin: 10px 0;
+        }
+
+        .play-link {
+            margin-left: 8px;
+			margin-right: 24px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .quiz-table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .quiz-table th,
+        .quiz-table td {
+            border: 1px solid #999999;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            vertical-align: middle;
+        }
+
+        .quiz-table th {
+            height: 42px;
+        }
+
+        .quiz-table td {
+            height: 46px;
+        }
+
+        .quiz-table th:nth-child(1),
+        .quiz-table td:nth-child(1) {
+            width: 55px;
+            text-align: center;
+        }
+
+        .quiz-table th:nth-child(2),
+        .quiz-table td:nth-child(2) {
+            width: 320px;
+        }
+
+        .quiz-table th:nth-child(3),
+        .quiz-table td:nth-child(3) {
+            width: 70px;
+            text-align: center;
+        }
+
+        .quiz-table th:nth-child(4),
+        .quiz-table td:nth-child(4) {
+            width: 140px;
+            text-align: center;
+        }
+
+        .quiz-table th:nth-child(5),
+        .quiz-table td:nth-child(5),
+        .quiz-table th:nth-child(6),
+        .quiz-table td:nth-child(6) {
+            width: 80px;
+            text-align: center;
+        }
+
+        .quiz-table form {
+            margin: 0;
+        }
+
+        .table-button {
+            min-width: 58px;
+            height: 32px;
+            border: 1px solid #666666;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .navigation {
+            margin-top: 26px;
+        }
+
+        .navigation a {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-right: 14px;
+	    }
+
+        a {
+            color: #0056b3;
+        }
+
+        @media screen and (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            textarea,
+            input[type="text"] {
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
+<div class="container">
+
     <h1>「○×クイズ」アプリ：CRUD</h1>
 
-    <h3 th:text="${title}">タイトル</h3>
+    <h3 th:text="${title}">
+        タイトル
+    </h3>
 
-    <!--/* 登録・更新完了コメント */-->
-    <p th:if="${complete}" th:text="${complete}" style="color:blue"></p>
+    <!-- 登録・更新完了コメント -->
+    <p class="message-success"
+       th:if="${complete}"
+       th:text="${complete}">
+    </p>
 
-    <!--/* ▼▼▼ Form ▼▼▼ */-->
-    <form method="POST"
-          th:action="${quiz2Form.newQuiz} ? @{/quiz2/insert} : @{/quiz2/update}"
-          th:object="${quiz2Form}">
+    <!-- 登録・編集フォーム -->
+    <div class="form-area">
 
-        <label>クイズの内容：</label><br>
+        <div class="form-inner">
 
-        <textarea rows="5" cols="50" th:field="*{question}"></textarea>
+            <form method="post"
+                  th:action="${quiz2Form.newQuiz}
+                      ? @{/quiz2/insert}
+                      : @{/quiz2/update}"
+                  th:object="${quiz2Form}">
 
-        <br>
+                <div class="form-row">
 
-        <div th:if="${#fields.hasErrors('question')}"
-             th:errors="*{question}"
-             style="color:red">
+                    <label for="question">
+                        クイズの内容：
+                    </label>
+
+                    <br>
+
+                    <textarea id="question"
+                              rows="5"
+                              cols="50"
+                              th:field="*{question}">
+                    </textarea>
+
+                    <div class="error-message"
+                         th:if="${#fields.hasErrors('question')}"
+                         th:errors="*{question}">
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <label>
+                        クイズの解答：
+                    </label>
+
+                    <div class="radio-area">
+
+                        <label>
+                            <input type="radio"
+                                   value="true"
+                                   th:field="*{answer}">
+                            ○
+                        </label>
+
+                        <label>
+                            <input type="radio"
+                                   value="false"
+                                   th:field="*{answer}">
+                            ×
+                        </label>
+
+                    </div>
+
+                    <div class="error-message"
+                         th:if="${#fields.hasErrors('answer')}"
+                         th:errors="*{answer}">
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <label for="author">
+                        作成者：
+                    </label>
+
+                    <br>
+
+                    <input id="author"
+                           type="text"
+                           th:field="*{author}">
+
+                    <div class="error-message"
+                         th:if="${#fields.hasErrors('author')}"
+                         th:errors="*{author}">
+                    </div>
+
+                </div>
+
+                <!-- 更新時のみIDを送る -->
+                <input th:if="${id}"
+                       type="hidden"
+                       th:field="*{id}">
+
+                <input class="submit-button"
+                       type="submit"
+                       th:value="${quiz2Form.newQuiz}
+                           ? '登録'
+                           : '更新'">
+
+            </form>
+
         </div>
 
-        <label>クイズの解答：</label><br>
+    </div>
 
-        <input type="radio" value="true" th:field="*{answer}">○
-        <input type="radio" value="false" th:field="*{answer}">×
-
-        <br>
-
-        <div th:if="${#fields.hasErrors('answer')}"
-             th:errors="*{answer}"
-             style="color:red">
-        </div>
-
-        <label>作成者：</label><br>
-
-        <input type="text" th:field="*{author}" />
-
-        <br>
-
-        <div th:if="${#fields.hasErrors('author')}"
-             th:errors="*{author}"
-             style="color:red">
-        </div>
-
-        <input th:if="${id}" type="hidden" th:field="*{id}">
-
-        <input type="submit" value="送信">
-
-    </form>
-    <!--/* △△△ Form △△△ */-->
-
-    <br>
-
-    <!--/* ========== ここまで上部エリア ========== */-->
     <hr>
 
-    <!--/* ========== ここから下部エリア ========== */-->
-
-    <!--/* ▼▼▼ 新規登録時のみ表示 ▼▼▼ */-->
-    <div th:if="${quiz2Form.newQuiz}" style="margin: 10px">
+    <!-- 新規登録時のみ一覧表示 -->
+    <div class="list-area"
+         th:if="${quiz2Form.newQuiz}">
 
         <h3>
             登録クイズ一覧：
-            <a th:href="@{/quiz2/play2}">プレイ</a><br>
+
+            <a class="play-link"
+               th:href="@{/quiz2/play2}">
+                プレイ
+            </a>
+			<a th:href="@{/menu}">
+				            メニュー画面へ
+		    </a>
         </h3>
 
-        <!--/* 削除完了コメント */-->
-        <p th:if="${delcomplete}"
-           th:text="${delcomplete}"
-           style="color:blue">
+        <!-- 削除完了コメント -->
+        <p class="message-success"
+           th:if="${delcomplete}"
+           th:text="${delcomplete}">
         </p>
 
-        <p th:if="${msg}"
-           th:text="${msg}"
-           style="color:red">
+        <!-- エラーメッセージ -->
+        <p class="message-error"
+           th:if="${msg}"
+           th:text="${msg}">
         </p>
 
-        <!--/* ▼▼▼ クイズ情報が1件でもあれば表示 ▼▼▼ */-->
+        <!-- クイズ情報が1件以上ある場合 -->
+        <div class="table-wrapper"
+             th:unless="${#lists.isEmpty(list)}">
 
-        <table border="1"
-               th:unless="${#lists.isEmpty(list)}"
-               style="table-layout: fixed;">
+            <table class="quiz-table">
 
-            <tr>
-                <th>ID</th>
-                <th>内容</th>
-                <th>解答</th>
-                <th>作成者</th>
-                <th>編集</th>
-                <th>削除</th>
-            </tr>
+                <thead>
 
-            <tr th:each="obj : ${list}" align="center">
+                <tr>
+                    <th>ID</th>
+                    <th>内容</th>
+                    <th>解答</th>
+                    <th>作成者</th>
+                    <th>編集</th>
+                    <th>削除</th>
+                </tr>
 
-                <td th:text="${obj.id}"></td>
+                </thead>
 
-                <td th:text="${obj.question}" align="left"></td>
+                <tbody>
 
-                <td th:text="${obj.answer} == true ? '○' : '×'"></td>
+                <tr th:each="obj : ${list}">
 
-                <td th:text="${obj.author}"></td>
+                    <td th:text="${obj.id}">
+                    </td>
 
-                <!--/* 編集ボタン */-->
-                <td>
+                    <td th:text="${obj.question}">
+                    </td>
 
-                    <form method="GET"
-                          th:action="@{/quiz2/{id}(id=${obj.id})}">
+                    <td th:text="${obj.answer == true ? '○' : '×'}">
+                    </td>
 
-                        <input type="submit" value="編集">
+                    <td th:text="${obj.author}">
+                    </td>
 
-                    </form>
+                    <!-- 編集ボタン -->
+                    <td>
 
-                </td>
+                        <form method="get"
+                              th:action="@{/quiz2/{id}(id=${obj.id})}">
 
-                <!--/* 削除ボタン */-->
-                <td>
+                            <input class="table-button"
+                                   type="submit"
+                                   value="編集">
 
-                    <form method="POST"
-                          th:action="@{/quiz2/delete}">
+                        </form>
 
-                        <input type="hidden"
-                               name="id"
-                               th:value="${obj.id}">
+                    </td>
 
-                        <input type="submit" value="削除">
+                    <!-- 削除ボタン -->
+                    <td>
 
-                    </form>
+                        <form method="post"
+                              th:action="@{/quiz2/delete}">
 
-                </td>
+                            <input type="hidden"
+                                   name="id"
+                                   th:value="${obj.id}">
 
-            </tr>
+                            <input class="table-button"
+                                   type="submit"
+                                   value="削除"
+                                   onclick="return confirm('このクイズを削除しますか？')">
 
-        </table>
+                        </form>
 
-        <!--/* △△△ クイズ情報が1件でもあれば表示 △△△ */-->
+                    </td>
 
-        <!--/* ▼▼▼ クイズ情報が1件もない場合表示 ▼▼▼ */-->
+                </tr>
 
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- クイズ情報が1件もない場合 -->
         <p th:if="${#lists.isEmpty(list)}">
             登録されているクイズはありません。
         </p>
 
-        <!--/* △△△ クイズ情報が1件もない場合表示 △△△ */-->
+    </div>
+
+    <!-- 画面移動 -->
+    <div class="navigation">
+
+        <!-- 編集時のみ表示 -->
+        <p th:unless="${quiz2Form.newQuiz}">
+
+            <a th:href="@{/quiz2}">
+                CRUD画面へ戻る
+            </a>
+
+        </p>
+
+	<!-- 画面移動 -->
+		<div class="navigation">
+			<a th:href="@{/quiz4/play2}">
+			           プレイ画面へ
+			</a>
+			
+            <a th:href="@{/menu}">
+                メニュー画面へ戻る
+            </a>
+       </div>
 
     </div>
 
-    <!--/* △△△ 新規登録時のみ表示 △△△ */-->
-
-    <!--/* ▼▼▼ 新規登録時でない時に表示 ▼▼▼ */-->
-
-    <p th:unless="${quiz2Form.newQuiz}">
-        <a href="#" th:href="@{/quiz2}">CRUD画面へ戻る</a>
-    </p>
-	<p>
-	       <a th:href="@{/menu}">メニュー画面へ戻る</a>
-	   </p>
-
-    <!--/* △△△ 新規登録時でない時に表示 △△△ */-->
+</div>
 
 </body>
 

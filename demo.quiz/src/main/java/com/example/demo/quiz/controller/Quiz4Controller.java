@@ -54,7 +54,7 @@ public class Quiz4Controller {
 
         service.insertQuiz4(quiz4);
 
-        return "redirect:/quiz4/play4";
+        return "redirect:/quiz4/menu4";
     }
 
     @GetMapping("/edit/{id}")
@@ -69,7 +69,7 @@ public class Quiz4Controller {
             return "quiz4/crud4";
         }
 
-        return "redirect:/quiz4/play4";
+        return "redirect:/quiz4/crud4";
     }
 
     @PostMapping("/update")
@@ -77,7 +77,7 @@ public class Quiz4Controller {
 
         service.updateQuiz4(quiz4);
 
-        return "redirect:/quiz4/play4";
+        return "redirect:/quiz4/crud4";
     }
 
     @PostMapping("/delete/{id}")
@@ -85,7 +85,7 @@ public class Quiz4Controller {
 
         service.deleteQuiz4ById(id);
 
-        return "redirect:/quiz4/play4";
+        return "redirect:/quiz4/crud4";
     }
 
     @PostMapping("/result")
