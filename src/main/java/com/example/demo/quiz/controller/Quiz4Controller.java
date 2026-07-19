@@ -103,6 +103,7 @@ public class Quiz4Controller {
     	                "msg",
     	                "更新が完了しました。"
     	        );
+    	        
 
     	    } catch (Exception e) {
 
@@ -120,7 +121,7 @@ public class Quiz4Controller {
 
         service.deleteQuiz4ById(id);
 
-        return "redirect:/quiz4/play4";
+        return "redirect:/quiz4/create";
     }
 
     @PostMapping("/result")
